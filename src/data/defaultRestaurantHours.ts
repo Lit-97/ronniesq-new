@@ -1,0 +1,60 @@
+import type { RestaurantDayHours } from "@/types/restaurantHours";
+
+export const DEFAULT_RESTAURANT_HOURS: RestaurantDayHours[] = [
+  {
+    dayOfWeek: 0,
+    dayName: "Sunday",
+    shortName: "Sun",
+    isOpen: false,
+    opensAt: null,
+    closesAt: null,
+  },
+  {
+    dayOfWeek: 1,
+    dayName: "Monday",
+    shortName: "Mon",
+    isOpen: false,
+    opensAt: null,
+    closesAt: null,
+  },
+  {
+    dayOfWeek: 2,
+    dayName: "Tuesday",
+    shortName: "Tues",
+    isOpen: true,
+    opensAt: "10:30",
+    closesAt: "19:00",
+  },
+  {
+    dayOfWeek: 3,
+    dayName: "Wednesday",
+    shortName: "Wed",
+    isOpen: true,
+    opensAt: "10:30",
+    closesAt: "19:00",
+  },
+  {
+    dayOfWeek: 4,
+    dayName: "Thursday",
+    shortName: "Thurs",
+    isOpen: true,
+    opensAt: "10:30",
+    closesAt: "19:00",
+  },
+  {
+    dayOfWeek: 5,
+    dayName: "Friday",
+    shortName: "Fri",
+    isOpen: true,
+    opensAt: "10:30",
+    closesAt: "19:00",
+  },
+  {
+    dayOfWeek: 6,
+    dayName: "Saturday",
+    shortName: "Sat",
+    isOpen: true,
+    opensAt: "10:30",
+    closesAt: "19:00",
+  },
+];
