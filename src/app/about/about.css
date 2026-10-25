@@ -1176,6 +1176,14 @@ body {
     min-height: auto;
 }
 
+    .about-hero-photo-wrap {
+     order: 1;
+}
+
+    .about-hero-inner {
+     order: 2;
+}
+
     .about-story-section,
     .about-origin-section,
     .about-values-section,
