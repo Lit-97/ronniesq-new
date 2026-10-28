@@ -1326,6 +1326,10 @@ body {
         height: 360px;
     }
 
+    .about-origin-final-image {
+        min-height: 320px;
+    }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1373,11 +1377,5 @@ body {
 
     .about-origin-final-card {
         text-align: left;
-    }
-}
-
-@media (max-width: 575px) {
-    .about-origin-final-image {
-        min-height: 320px;
     }
 }
