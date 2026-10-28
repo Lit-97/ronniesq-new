@@ -1337,6 +1337,45 @@ body {
         min-height: 320px;
     }
 
+    .about-origin-layout> :nth-child(1) {
+        order: 1;
+    }
+
+    .about-origin-layout> :nth-child(2) {
+        order: 2;
+    }
+
+    .about-origin-layout> :nth-child(3) {
+        order: 4;
+    }
+
+    .about-origin-layout> :nth-child(4) {
+        order: 3;
+    }
+
+    .about-origin-layout> :nth-child(5) {
+        order: 5;
+    }
+
+    .about-origin-layout> :nth-child(6) {
+        order: 6;
+    }
+
+    /* Mobile location section: text first, photo second */
+.about-location-content {
+    order: 1;
+    left: 0;
+    margin-right: 0;
+}
+
+.about-location-image {
+    order: 2;
+}
+
+.about-location-shell {
+    gap: 18px;
+}
+
 }
 
 @media (prefers-reduced-motion: reduce) {
