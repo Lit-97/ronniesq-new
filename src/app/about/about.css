@@ -432,12 +432,10 @@ body {
     gap: 8px;
 }
 
-.about-story-hours-row
-    + .about-story-hours-row {
+.about-story-hours-row+.about-story-hours-row {
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid
-        hsla(38, 61%, 73%, 0.18);
+    border-top: 1px solid hsla(38, 61%, 73%, 0.18);
 }
 
 .about-story-hours span {
@@ -909,25 +907,18 @@ body {
     pointer-events: none;
     mix-blend-mode: screen;
     filter:
-        contrast(1.18)
-        brightness(1.2)
-        blur(0.2px)
-        drop-shadow(0 0 16px hsla(0, 0%, 100%, 0.14));
+        contrast(1.18) brightness(1.2) blur(0.2px) drop-shadow(0 0 16px hsla(0, 0%, 100%, 0.14));
 
-    -webkit-mask-image: radial-gradient(
-        ellipse at center,
-        black 0%,
-        black 56%,
-        rgba(0, 0, 0, 0.7) 68%,
-        transparent 86%
-    );
-    mask-image: radial-gradient(
-        ellipse at center,
-        black 0%,
-        black 56%,
-        rgba(0, 0, 0, 0.7) 68%,
-        transparent 86%
-    );
+    -webkit-mask-image: radial-gradient(ellipse at center,
+            black 0%,
+            black 56%,
+            rgba(0, 0, 0, 0.7) 68%,
+            transparent 86%);
+    mask-image: radial-gradient(ellipse at center,
+            black 0%,
+            black 56%,
+            rgba(0, 0, 0, 0.7) 68%,
+            transparent 86%);
 
     animation: smokeSoftLoop 12s linear infinite;
 }
@@ -1172,17 +1163,17 @@ body {
 
 
     .about-cinematic-hero {
-    padding: 220px 18px 80px;
-    min-height: auto;
-}
+        padding: 220px 18px 80px;
+        min-height: auto;
+    }
 
     .about-hero-photo-wrap {
-     order: 1;
-}
+        order: 1;
+    }
 
     .about-hero-inner {
-     order: 2;
-}
+        order: 2;
+    }
 
     .about-story-section,
     .about-origin-section,
@@ -1293,45 +1284,48 @@ body {
     }
 
     .about-award-collage {
-    min-height: auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    align-items: start;
-}
+        min-height: auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        align-items: start;
+    }
 
-.about-award-smoke {
-    display: none;
-}
+    .about-award-smoke {
+        display: none;
+    }
 
-.about-smoker-back-card,
-.about-main-award-plaque,
-.about-dickson-award-plaque {
-    position: relative;
-    inset: auto;
-    right: auto;
-    left: auto;
-    bottom: auto;
-    width: 100%;
-}
+    .about-smoker-back-card,
+    .about-main-award-plaque,
+    .about-dickson-award-plaque {
+        position: relative;
+        inset: auto;
+        right: auto;
+        left: auto;
+        bottom: auto;
+        width: 100%;
+    }
 
-.about-smoker-back-card {
-    grid-column: 1 / -1;
-    height: 260px;
-}
+    /* Smoker photo spans the full width */
+    .about-smoker-back-card {
+        grid-column: 1 / -1;
+        height: 260px;
+    }
 
-.about-main-award-plaque,
-.about-dickson-award-plaque {
-    height: auto;
-    aspect-ratio: 4 / 5;
-}
+    /* Awards sit beside each other */
+    .about-main-award-plaque,
+    .about-dickson-award-plaque {
+        height: auto;
+        aspect-ratio: 4 / 5;
+    }
 
-.about-main-award-plaque img,
-.about-dickson-award-plaque img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+    /* Keep the award artwork fully visible */
+    .about-main-award-plaque img,
+    .about-dickson-award-plaque img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 
     .about-origin-final-image {
         min-height: 320px;
@@ -1361,20 +1355,19 @@ body {
         order: 6;
     }
 
-    /* Mobile location section: text first, photo second */
-.about-location-content {
-    order: 1;
-    left: 0;
-    margin-right: 0;
-}
+    .about-location-content {
+        order: 1;
+        left: 0;
+        margin-right: 0;
+    }
 
-.about-location-image {
-    order: 2;
-}
+    .about-location-image {
+        order: 2;
+    }
 
-.about-location-shell {
-    gap: 18px;
-}
+    .about-location-shell {
+        gap: 18px;
+    }
 
 }
 
