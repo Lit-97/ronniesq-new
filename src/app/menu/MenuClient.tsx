@@ -694,6 +694,7 @@ export default function MenuClient({
     const [callInList, setCallInList] = useState<CallInListItem[]>([]);
     const [includeCardFee, setIncludeCardFee] = useState(false);
     const [showRequiredOptionError, setShowRequiredOptionError] = useState(false);
+    const [isCallInListVisible, setIsCallInListVisible] = useState(false);
 
 
     const getAllOptionGroupsForItem = (
@@ -990,7 +991,7 @@ export default function MenuClient({
 
 
                     return {
-                        
+
                         ...(staticItem ?? {}),
 
                         id:
@@ -1168,6 +1169,35 @@ export default function MenuClient({
     useEffect(() => {
         window.localStorage.setItem(INCLUDE_CARD_FEE_STORAGE_KEY, String(includeCardFee));
     }, [includeCardFee]);
+
+    useEffect(() => {
+        if (callInList.length === 0) {
+            setIsCallInListVisible(false);
+            return;
+        }
+
+        const callInListSection = document.getElementById("call-in-list");
+
+        if (!callInListSection) {
+            setIsCallInListVisible(false);
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsCallInListVisible(entry.isIntersecting);
+            },
+            {
+                threshold: 0.15,
+            }
+        );
+
+        observer.observe(callInListSection);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, [callInList.length]);
 
     const SALES_TAX_RATE = 0.0975;
     const CARD_FEE_RATE = 0.03;
@@ -2226,7 +2256,7 @@ export default function MenuClient({
                 </section>
             </main>
 
-            {callInList.length > 0 && (
+            {callInList.length > 0 && !isCallInListVisible && (
                 <div className="mobile-call-list-bar">
                     <div>
                         <p className="mobile-call-list-label">Call-In List</p>
