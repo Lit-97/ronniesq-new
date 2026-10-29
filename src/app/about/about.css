@@ -432,12 +432,10 @@ body {
     gap: 8px;
 }
 
-.about-story-hours-row
-    + .about-story-hours-row {
+.about-story-hours-row+.about-story-hours-row {
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid
-        hsla(38, 61%, 73%, 0.18);
+    border-top: 1px solid hsla(38, 61%, 73%, 0.18);
 }
 
 .about-story-hours span {
@@ -909,25 +907,18 @@ body {
     pointer-events: none;
     mix-blend-mode: screen;
     filter:
-        contrast(1.18)
-        brightness(1.2)
-        blur(0.2px)
-        drop-shadow(0 0 16px hsla(0, 0%, 100%, 0.14));
+        contrast(1.18) brightness(1.2) blur(0.2px) drop-shadow(0 0 16px hsla(0, 0%, 100%, 0.14));
 
-    -webkit-mask-image: radial-gradient(
-        ellipse at center,
-        black 0%,
-        black 56%,
-        rgba(0, 0, 0, 0.7) 68%,
-        transparent 86%
-    );
-    mask-image: radial-gradient(
-        ellipse at center,
-        black 0%,
-        black 56%,
-        rgba(0, 0, 0, 0.7) 68%,
-        transparent 86%
-    );
+    -webkit-mask-image: radial-gradient(ellipse at center,
+            black 0%,
+            black 56%,
+            rgba(0, 0, 0, 0.7) 68%,
+            transparent 86%);
+    mask-image: radial-gradient(ellipse at center,
+            black 0%,
+            black 56%,
+            rgba(0, 0, 0, 0.7) 68%,
+            transparent 86%);
 
     animation: smokeSoftLoop 12s linear infinite;
 }
@@ -1172,9 +1163,17 @@ body {
 
 
     .about-cinematic-hero {
-    padding: 220px 18px 80px;
-    min-height: auto;
-}
+        padding: 220px 18px 80px;
+        min-height: auto;
+    }
+
+    .about-hero-photo-wrap {
+        order: 1;
+    }
+
+    .about-hero-inner {
+        order: 2;
+    }
 
     .about-story-section,
     .about-origin-section,
@@ -1287,7 +1286,9 @@ body {
     .about-award-collage {
         min-height: auto;
         display: grid;
-        gap: 18px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        align-items: start;
     }
 
     .about-award-smoke {
@@ -1299,23 +1300,73 @@ body {
     .about-dickson-award-plaque {
         position: relative;
         inset: auto;
-        width: 100%;
         right: auto;
         left: auto;
         bottom: auto;
+        width: 100%;
     }
 
+    /* Smoker photo spans the full width */
     .about-smoker-back-card {
-        height: 300px;
+        grid-column: 1 / -1;
+        height: 260px;
     }
 
-    .about-main-award-plaque {
-        height: auto;
-        aspect-ratio: 1 / 1.25;
-    }
-
+    /* Awards sit beside each other */
+    .about-main-award-plaque,
     .about-dickson-award-plaque {
-        height: 360px;
+        height: auto;
+        aspect-ratio: 4 / 5;
+    }
+
+    /* Keep the award artwork fully visible */
+    .about-main-award-plaque img,
+    .about-dickson-award-plaque img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .about-origin-final-image {
+        min-height: 320px;
+    }
+
+    .about-origin-layout> :nth-child(1) {
+        order: 1;
+    }
+
+    .about-origin-layout> :nth-child(2) {
+        order: 2;
+    }
+
+    .about-origin-layout> :nth-child(3) {
+        order: 4;
+    }
+
+    .about-origin-layout> :nth-child(4) {
+        order: 3;
+    }
+
+    .about-origin-layout> :nth-child(5) {
+        order: 5;
+    }
+
+    .about-origin-layout> :nth-child(6) {
+        order: 6;
+    }
+
+    .about-location-content {
+        order: 1;
+        left: 0;
+        margin-right: 0;
+    }
+
+    .about-location-image {
+        order: 2;
+    }
+
+    .about-location-shell {
+        gap: 18px;
     }
 
 }
@@ -1365,11 +1416,5 @@ body {
 
     .about-origin-final-card {
         text-align: left;
-    }
-}
-
-@media (max-width: 575px) {
-    .about-origin-final-image {
-        min-height: 320px;
     }
 }
