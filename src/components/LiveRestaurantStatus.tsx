@@ -2,11 +2,46 @@
 
 import {
   useEffect,
+  useRef,
   useState,
 } from "react";
 
+import { useRouter } from "next/navigation";
+
 const RESTAURANT_TIME_ZONE =
   "America/Chicago";
+
+function getDicksonDateKey(): string {
+  const formatter = new Intl.DateTimeFormat(
+    "en-CA",
+    {
+      timeZone: RESTAURANT_TIME_ZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    },
+  );
+
+  const parts =
+    formatter.formatToParts(new Date());
+
+  const year =
+    parts.find(
+      (part) => part.type === "year",
+    )?.value ?? "";
+
+  const month =
+    parts.find(
+      (part) => part.type === "month",
+    )?.value ?? "";
+
+  const day =
+    parts.find(
+      (part) => part.type === "day",
+    )?.value ?? "";
+
+  return `${year}-${month}-${day}`;
+}
 
 type LiveRestaurantStatusProps = {
   initialTodayText: string;
@@ -207,11 +242,30 @@ export default function LiveRestaurantStatus({
   opensAt,
   closesAt,
 }: LiveRestaurantStatusProps) {
+  const router = useRouter();
+
+  const currentDateRef =
+    useRef(getDicksonDateKey());
+
   const [todayText, setTodayText] =
     useState(initialTodayText);
 
   useEffect(() => {
     function updateStatus() {
+      const currentDate =
+        getDicksonDateKey();
+
+      if (
+        currentDate !==
+        currentDateRef.current
+      ) {
+        currentDateRef.current =
+          currentDate;
+
+        router.refresh();
+        return;
+      }
+
       setTodayText(
         buildStatusText(
           scheduledOpen,
@@ -256,6 +310,7 @@ export default function LiveRestaurantStatus({
       );
     };
   }, [
+    router,
     scheduledOpen,
     opensAt,
     closesAt,
@@ -275,11 +330,10 @@ export default function LiveRestaurantStatus({
   return (
     <>
       <span
-        className={`restaurant-status-word ${
-          openNow
-            ? "is-open"
-            : "is-closed"
-        }`}
+        className={`restaurant-status-word ${openNow
+          ? "is-open"
+          : "is-closed"
+          }`}
       >
         {statusWord}
       </span>

@@ -11,6 +11,8 @@ import AboutReveal from "./AboutReveal";
 import AboutMemoryGallery from "./AboutMemoryGallery";
 import "./about.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
     title: "About Us | Ronnie's Q",
     description:

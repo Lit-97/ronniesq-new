@@ -11,6 +11,8 @@ import { getRestaurantNotices } from "@/lib/restaurant-notices";
 import ContactForm from "./ContactForm";
 import "./contact.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
     title: "Contact Us | Ronnie's Q",
     description:

@@ -16,6 +16,8 @@ import { getRestaurantContactInfo } from "@/lib/restaurant-contact";
 import { getRestaurantLocationInfo } from "@/lib/restaurant-location";
 import { getRestaurantNotices } from "@/lib/restaurant-notices";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const [
     restaurantHours,
