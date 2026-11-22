@@ -4,10 +4,14 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteScripts from "@/components/SiteScripts";
 import OrderModalController from "@/components/OrderModalController";
-import { getHeaderHours } from "@/lib/restaurant-hours";
+import { getRestaurantHoursCalendar } from "@/lib/restaurant-hours-calendar";
+import RestaurantHoursSchedule from "@/components/RestaurantHoursSchedule";
 import { getRestaurantContactInfo } from "@/lib/restaurant-contact";
 import { getRestaurantLocationInfo } from "@/lib/restaurant-location";
 import { getRestaurantNotices } from "@/lib/restaurant-notices";
+import {
+    getContactPageContent,
+} from "@/lib/contact-page-content";
 import ContactForm from "./ContactForm";
 import "./contact.css";
 
@@ -42,28 +46,38 @@ function formatContactTime(
     return `${displayHour}:${minuteText} ${suffix}`;
 }
 
+
 export default async function ContactPage() {
     const [
-        restaurantHours,
+        hoursCalendar,
         contactInfo,
         locationInfo,
         customerNotices,
+        contactContent,
     ] = await Promise.all([
-        getHeaderHours(),
+        getRestaurantHoursCalendar(),
         getRestaurantContactInfo(),
         getRestaurantLocationInfo(),
         getRestaurantNotices(),
+        getContactPageContent(),
     ]);
 
+    const dayName = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/Chicago",
+        weekday: "long",
+    }).format(new Date());
+
     const {
-        weeklyDays,
-        hasTodayOverride,
-        specialDateLabel,
-        dayName,
-        isOpen,
-        hoursText,
-        customerMessage,
-    } = restaurantHours;
+        scheduledOpen: isOpen,
+        opensAt,
+        closesAt,
+    } = hoursCalendar.today;
+
+    const hoursText =
+        isOpen && opensAt && closesAt
+            ? `${formatContactTime(opensAt)} to ${formatContactTime(closesAt)}`
+            : "Closed";
+
 
     const {
         phone,
@@ -108,16 +122,19 @@ export default async function ContactPage() {
                             <span>{cityState}</span>
                         </div>
 
-                        <p className="section-subtitle label-2">Get in Touch</p>
+                        <p className="section-subtitle label-2">
+                            {contactContent.hero.subtitle}
+                        </p>
 
                         <h1 id="contact-page-title" className="contact-page-hero-title">
-                            Let&apos;s Talk
-                            <span>Barbecue.</span>
+                            {contactContent.hero.titleLine1}
+                            <span>
+                                {contactContent.hero.titleLine2}
+                            </span>
                         </h1>
 
                         <p className="contact-page-hero-text">
-                            Have a question about the menu, catering, a large order, or
-                            visiting Ronnie&apos;s Q? Give us a call or send us a message.
+                            {contactContent.hero.description}
                         </p>
 
                         <div className="contact-page-hero-actions">
@@ -126,32 +143,37 @@ export default async function ContactPage() {
                                 className="btn btn-secondary"
                             >
                                 <span className="text text-1">
-                                    Call Ronnie&apos;s Q
+                                    {contactContent.hero.callButtonText}
                                 </span>
 
                                 <span
                                     className="text text-2"
                                     aria-hidden="true"
                                 >
-                                    Call Ronnie&apos;s Q
+                                    {contactContent.hero.callButtonText}
                                 </span>
                             </a>
 
-                            <Link href="/menu" className="contact-page-text-link">
-                                View Our Menu
+                            <Link
+                                href="/menu"
+                                className="contact-page-text-link"
+                            >
+                                {contactContent.hero.menuButtonText}
                             </Link>
                         </div>
 
                         <div className="contact-page-hero-banner">
                             <span className="contact-page-hero-banner-kicker">
-                                Slow-Smoked • Southern-Made
+                                {contactContent.hero.bannerKicker}
                             </span>
 
-                            <h2>Come Hungry.</h2>
+                            <h2>
+                                {contactContent.hero.bannerTitle}
+                            </h2>
 
                             <p>
-                                Slow-smoked barbecue, Southern sides, and hometown service in
-                                the heart of {city}.
+                                {contactContent.hero.bannerDescriptionBeforeCity}{" "}
+                                {city}.
                             </p>
                         </div>
 
@@ -217,7 +239,7 @@ export default async function ContactPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Get Directions
+                                {contactContent.location.directionsButtonText}
                                 <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
                             </a>
                         </div>
@@ -230,18 +252,19 @@ export default async function ContactPage() {
                 >
                     <div className="container">
                         <div className="contact-page-section-heading">
-                            <p className="section-subtitle label-2">Contact Options</p>
+                            <p className="section-subtitle label-2">
+                                {contactContent.options.subtitle}
+                            </p>
 
                             <h2
                                 id="contact-options-title"
                                 className="contact-page-section-title"
                             >
-                                Reach Ronnie&apos;s Q Your Way
+                                {contactContent.options.title}
                             </h2>
 
                             <p>
-                                Calling is the fastest way to ask about today&apos;s menu,
-                                specials, availability, or a same-day order.
+                                {contactContent.options.description}
                             </p>
                         </div>
 
@@ -261,12 +284,11 @@ export default async function ContactPage() {
                                 <strong>{phone}</strong>
 
                                 <p>
-                                    Call during restaurant hours for orders, menu questions, and
-                                    faster assistance.
+                                    {contactContent.options.callDescription}
                                 </p>
 
                                 <span className="contact-page-card-action">
-                                    Call Ronnie&apos;s Q
+                                    {contactContent.options.callAction}
                                 </span>
                             </a>
 
@@ -285,11 +307,12 @@ export default async function ContactPage() {
                                 <strong>{email}</strong>
 
                                 <p>
-                                    Email us about catering, future events, business questions,
-                                    and other non-urgent requests.
+                                    {contactContent.options.emailDescription}
                                 </p>
 
-                                <span className="contact-page-card-action">Send an Email</span>
+                                <span className="contact-page-card-action">
+                                    {contactContent.options.emailAction}
+                                </span>
                             </a>
 
                             <a
@@ -312,12 +335,13 @@ export default async function ContactPage() {
                                 <strong>{streetAddress}</strong>
 
                                 <p>
-                                    Find us in {cityState} for dine-in service, takeout,
-                                    and Southern barbecue.
+                                    {contactContent.options.visitDescriptionBeforeCity}{" "}
+                                    {cityState}{" "}
+                                    {contactContent.options.visitDescriptionAfterCity}
                                 </p>
 
                                 <span className="contact-page-card-action">
-                                    Open Google Maps
+                                    {contactContent.options.visitAction}
                                 </span>
                             </a>
                         </div>
@@ -331,25 +355,27 @@ export default async function ContactPage() {
                 >
                     <div className="container contact-page-message-layout">
                         <div className="contact-page-message-intro">
-                            <p className="section-subtitle label-2">Send a Message</p>
+                            <p className="section-subtitle label-2">
+                                {contactContent.message.subtitle}
+                            </p>
 
                             <h2 id="message-title" className="contact-page-section-title">
-                                How Can We Help?
+                                {contactContent.message.title}
                             </h2>
 
                             <div className="contact-page-gold-line"></div>
 
                             <p>
-                                Tell us what you are contacting us about and include any
-                                helpful details. For same-day orders or urgent questions,
-                                please call the restaurant instead.
+                                {contactContent.message.description}
                             </p>
 
                             <div className="contact-page-call-notice">
                                 <ion-icon name="call-outline" aria-hidden="true"></ion-icon>
 
                                 <div>
-                                    <span>Need a faster answer?</span>
+                                    <span>
+                                        {contactContent.message.fastAnswerTitle}
+                                    </span>
 
                                     <a href={phoneHref}>
                                         Call {phone}
@@ -357,51 +383,32 @@ export default async function ContactPage() {
                                 </div>
                             </div>
 
+
                             <div className="contact-page-inquiry-list">
-                                <h3>Contact us about:</h3>
+                                <h3>
+                                    {contactContent.message.inquiryHeading}
+                                </h3>
 
                                 <ul>
-                                    <li>
-                                        <ion-icon
-                                            name="checkmark-outline"
-                                            aria-hidden="true"
-                                        ></ion-icon>
-                                        Menu or order questions
-                                    </li>
+                                    {[
+                                        contactContent.message.inquiry1,
+                                        contactContent.message.inquiry2,
+                                        contactContent.message.inquiry3,
+                                        contactContent.message.inquiry4,
+                                        contactContent.message.inquiry5,
+                                    ].map((topic, index) => (
+                                        <li key={index}>
+                                            <ion-icon
+                                                name="checkmark-outline"
+                                                aria-hidden="true"
+                                            ></ion-icon>
 
-                                    <li>
-                                        <ion-icon
-                                            name="checkmark-outline"
-                                            aria-hidden="true"
-                                        ></ion-icon>
-                                        Catering requests
-                                    </li>
-
-                                    <li>
-                                        <ion-icon
-                                            name="checkmark-outline"
-                                            aria-hidden="true"
-                                        ></ion-icon>
-                                        Events and large orders
-                                    </li>
-
-                                    <li>
-                                        <ion-icon
-                                            name="checkmark-outline"
-                                            aria-hidden="true"
-                                        ></ion-icon>
-                                        Restaurant feedback
-                                    </li>
-
-                                    <li>
-                                        <ion-icon
-                                            name="checkmark-outline"
-                                            aria-hidden="true"
-                                        ></ion-icon>
-                                        General questions
-                                    </li>
+                                            {topic}
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
+
                         </div>
 
                         <ContactForm
@@ -427,10 +434,13 @@ export default async function ContactPage() {
                             </div>
 
                             <div className="contact-page-location-content">
-                                <p className="section-subtitle label-2">Visit Ronnie&apos;s Q</p>
+                                <p className="section-subtitle label-2">
+                                    {contactContent.location.subtitle}
+                                </p>
 
                                 <h2 id="visit-title" className="contact-page-section-title">
-                                    Find Us in {city}
+                                    {contactContent.location.titlePrefix}{" "}
+                                    {city}
                                 </h2>
 
                                 <div className="contact-page-gold-line"></div>
@@ -461,75 +471,11 @@ export default async function ContactPage() {
                                     </a>
                                 </div>
 
+
                                 <div className="contact-page-hours">
-                                    {hasTodayOverride && (
-                                        <div className="contact-page-special-hours">
-                                            <p className="contact-page-special-hours-label">
-                                                Current Special Hours
-                                            </p>
-
-                                            <div className="contact-page-special-hours-schedule">
-                                                <span>
-                                                    {specialDateLabel ?? "Today"}
-                                                </span>
-
-                                                <strong
-                                                    className={
-                                                        isOpen
-                                                            ? undefined
-                                                            : "contact-page-closed"
-                                                    }
-                                                >
-                                                    {isOpen
-                                                        ? hoursText.replace(
-                                                            " to ",
-                                                            " – ",
-                                                        )
-                                                        : "Closed"}
-                                                </strong>
-                                            </div>
-
-                                            {customerMessage && (
-                                                <small>
-                                                    {customerMessage}
-                                                </small>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {hasTodayOverride && (
-                                        <p className="contact-page-regular-hours-label">
-                                            Regular Weekly Hours
-                                        </p>
-                                    )}
-
-                                    {weeklyDays.map((day) => (
-                                        <div
-                                            className="contact-page-hours-row"
-                                            key={day.dayOfWeek}
-                                        >
-                                            <span>{day.dayName}</span>
-
-                                            <strong
-                                                className={
-                                                    day.isOpen
-                                                        ? undefined
-                                                        : "contact-page-closed"
-                                                }
-                                            >
-                                                {day.isOpen &&
-                                                    day.opensAt &&
-                                                    day.closesAt
-                                                    ? `${formatContactTime(
-                                                        day.opensAt,
-                                                    )} – ${formatContactTime(
-                                                        day.closesAt,
-                                                    )}`
-                                                    : "Closed"}
-                                            </strong>
-                                        </div>
-                                    ))}
+                                    <RestaurantHoursSchedule calendar={hoursCalendar} />
                                 </div>
+
 
                                 <a
                                     href={mapUrl}
@@ -537,10 +483,12 @@ export default async function ContactPage() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <span className="text text-1">Get Directions</span>
+                                    <span className="text text-1">
+                                        {contactContent.location.directionsButtonText}
+                                    </span>
 
                                     <span className="text text-2" aria-hidden="true">
-                                        Get Directions
+                                        {contactContent.location.directionsButtonText}
                                     </span>
                                 </a>
                             </div>

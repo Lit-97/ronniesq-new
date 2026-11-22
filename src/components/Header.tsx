@@ -1,4 +1,4 @@
-import { getHeaderHours } from "@/lib/restaurant-hours";
+import { getRestaurantHoursCalendar } from "@/lib/restaurant-hours-calendar";
 import LiveRestaurantStatus from "@/components/LiveRestaurantStatus";
 import { getRestaurantContactInfo } from "@/lib/restaurant-contact";
 import { getRestaurantLocationInfo } from "@/lib/restaurant-location";
@@ -13,25 +13,30 @@ const navLinks = [
 
 
 export default async function Header() {
+
+
   const [
-    headerHours,
+    hoursCalendar,
     contactInfo,
     locationInfo,
     brandingInfo,
   ] = await Promise.all([
-    getHeaderHours(),
+    getRestaurantHoursCalendar(),
     getRestaurantContactInfo(),
     getRestaurantLocationInfo(),
     getRestaurantBrandingInfo(),
   ]);
 
+
+
+
   const {
-    todayText,
-    customerMessage,
-    isOpen,
+    initialTodayText,
+    scheduledOpen,
     opensAt,
     closesAt,
-  } = headerHours;
+  } = hoursCalendar.today;
+
 
   const {
     phone,
@@ -78,8 +83,8 @@ export default async function Header() {
 
             <span className="span">
               <LiveRestaurantStatus
-                initialTodayText={todayText}
-                scheduledOpen={isOpen}
+                initialTodayText={initialTodayText}
+                scheduledOpen={scheduledOpen}
                 opensAt={opensAt}
                 closesAt={closesAt}
               />
@@ -115,28 +120,7 @@ export default async function Header() {
       </div>
 
       {/* HEADER */}
-      <header
-        className={`header ${customerMessage ? "has-announcement" : ""
-          }`}
-        data-header
-      >
-        {customerMessage && (
-          <div
-            className="site-announcement"
-            role="status"
-            aria-label="Restaurant notice"
-          >
-            <div className="container">
-              <ion-icon
-                name="megaphone-outline"
-                aria-hidden="true"
-              ></ion-icon>
-
-              <p>{customerMessage}</p>
-            </div>
-          </div>
-        )}
-
+      <header className="header" data-header>
         <div className="container">
           <a href="/#home" className="logo header-logo" aria-label="Ronnie's Q home">
             <img
@@ -183,8 +167,8 @@ export default async function Header() {
 
               <p className="body-4 navbar-text">
                 <LiveRestaurantStatus
-                  initialTodayText={todayText}
-                  scheduledOpen={isOpen}
+                  initialTodayText={initialTodayText}
+                  scheduledOpen={scheduledOpen}
                   opensAt={opensAt}
                   closesAt={closesAt}
                 />

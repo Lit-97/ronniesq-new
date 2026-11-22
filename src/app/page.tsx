@@ -11,7 +11,7 @@ import SiteScripts from "@/components/SiteScripts";
 import SpecialDish from "@/components/SpecialDish";
 import Testimonials from "@/components/Testimonials";
 import OrderModalController from "@/components/OrderModalController";
-import { getHeaderHours } from "@/lib/restaurant-hours";
+import { getRestaurantHoursCalendar } from "@/lib/restaurant-hours-calendar";
 import { getRestaurantContactInfo } from "@/lib/restaurant-contact";
 import { getRestaurantLocationInfo } from "@/lib/restaurant-location";
 import { getRestaurantNotices } from "@/lib/restaurant-notices";
@@ -19,17 +19,19 @@ import { getRestaurantNotices } from "@/lib/restaurant-notices";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
+
   const [
-    restaurantHours,
+    hoursCalendar,
     contactInfo,
     locationInfo,
     customerNotices,
   ] = await Promise.all([
-    getHeaderHours(),
+    getRestaurantHoursCalendar(),
     getRestaurantContactInfo(),
     getRestaurantLocationInfo(),
     getRestaurantNotices(),
   ]);
+
 
   const sameDayOrderNotice =
     customerNotices.find(
@@ -55,32 +57,16 @@ export default async function Home() {
           <SpecialDish />
           <Menu />
           <Testimonials />
+
           <ContactReservation
-            weeklyScheduleLines={
-              restaurantHours.weeklyScheduleLines
-            }
-            todaySpecialHours={
-              restaurantHours.hasTodayOverride
-                ? {
-                  dateLabel:
-                    restaurantHours.specialDateLabel ??
-                    restaurantHours.dayName,
-
-                  isOpen: restaurantHours.isOpen,
-                  hoursText: restaurantHours.hoursText,
-
-                  message:
-                    restaurantHours.customerMessage,
-                }
-
-                : null
-            }
+            hoursCalendar={hoursCalendar}
             phone={contactInfo.phone}
             phoneHref={contactInfo.phoneHref}
             fullAddress={locationInfo.fullAddress}
             sameDayOrderNotice={sameDayOrderNotice}
             onlineOrderingNotice={onlineOrderingNotice}
           />
+
           <Features />
           <Articles />
         </article>

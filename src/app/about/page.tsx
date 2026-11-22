@@ -3,7 +3,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SiteScripts from "@/components/SiteScripts";
 import OrderModalController from "@/components/OrderModalController";
-import { getHeaderHours } from "@/lib/restaurant-hours";
+import { getRestaurantHoursCalendar } from "@/lib/restaurant-hours-calendar";
+import RestaurantHoursSchedule from "@/components/RestaurantHoursSchedule";
 import { getRestaurantContactInfo } from "@/lib/restaurant-contact";
 import { getRestaurantLocationInfo } from "@/lib/restaurant-location";
 import { getAboutPageContent } from "@/lib/about-page-content";
@@ -19,21 +20,20 @@ export const metadata = {
         "Learn the story behind Ronnie's Q, a family barbecue restaurant in Dickson, Tennessee.",
 };
 
+
 export default async function AboutPage() {
     const [
-        restaurantHours,
+        hoursCalendar,
         contactInfo,
         locationInfo,
         aboutContent,
     ] = await Promise.all([
-        getHeaderHours(),
+        getRestaurantHoursCalendar(),
         getRestaurantContactInfo(),
         getRestaurantLocationInfo(),
         getAboutPageContent(),
     ]);
 
-    const { weeklyScheduleLines } =
-        restaurantHours;
 
     const {
         phoneHref,
@@ -175,22 +175,11 @@ export default async function AboutPage() {
                                     {aboutContent.story.paragraph2}
                                 </p>
 
-                                <div className="about-story-hours">
-                                    {weeklyScheduleLines.map((line) => (
-                                        <div
-                                            className="about-story-hours-row"
-                                            key={`${line.dayLabel}-${line.hoursText}`}
-                                        >
-                                            <span>
-                                                Open {line.dayLabel}
-                                            </span>
 
-                                            <strong>
-                                                {line.hoursText}
-                                            </strong>
-                                        </div>
-                                    ))}
+                                <div className="about-story-hours">
+                                    <RestaurantHoursSchedule calendar={hoursCalendar} />
                                 </div>
+
                             </article>
 
                             <div className="about-photo-collage about-award-collage" data-about-reveal>
@@ -408,7 +397,7 @@ export default async function AboutPage() {
                             </figure>
                         </div>
 
-                        
+
                     </div>
                 </section>
 
@@ -501,7 +490,7 @@ export default async function AboutPage() {
                 </section>
 
                 <section className="about-memory-section" aria-labelledby="memory-title">
-                                        <div
+                    <div
                         className="about-memory-header"
                         data-about-reveal
                     >
@@ -531,7 +520,7 @@ export default async function AboutPage() {
                 <section className="about-location-section">
                     <div className="container">
                         <div className="about-location-shell" data-about-reveal>
-                                                        <div className="about-location-content">
+                            <div className="about-location-content">
                                 <p className="section-subtitle label-2">
                                     {aboutContent.location.subtitle}
                                 </p>

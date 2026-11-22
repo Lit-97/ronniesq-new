@@ -1,4 +1,6 @@
-import { getHeaderHours } from "@/lib/restaurant-hours";
+
+import { getRestaurantHoursCalendar } from "@/lib/restaurant-hours-calendar";
+import RestaurantHoursSchedule from "@/components/RestaurantHoursSchedule";
 import { getRestaurantContactInfo } from "@/lib/restaurant-contact";
 import { getRestaurantLocationInfo } from "@/lib/restaurant-location";
 
@@ -32,19 +34,19 @@ const socialLinks = [
   },
 ];
 
+
+
 export default async function Footer() {
   const [
-    restaurantHours,
+    hoursCalendar,
     contactInfo,
     locationInfo,
   ] = await Promise.all([
-    getHeaderHours(),
+    getRestaurantHoursCalendar(),
     getRestaurantContactInfo(),
     getRestaurantLocationInfo(),
   ]);
 
-  const { weeklyScheduleLines } =
-    restaurantHours;
 
   const {
     phone,
@@ -58,16 +60,16 @@ export default async function Footer() {
   } = locationInfo;
 
   const footerSocialLinks = [
-  ...socialLinks.slice(0, 3),
+    ...socialLinks.slice(0, 3),
 
-  {
-    label: "Google Map",
-    href: mapUrl,
-    external: true,
-  },
+    {
+      label: "Google Map",
+      href: mapUrl,
+      external: true,
+    },
 
-  ...socialLinks.slice(3),
-];
+    ...socialLinks.slice(3),
+  ];
 
   return (
     <footer
@@ -93,8 +95,8 @@ export default async function Footer() {
             </a>
 
             <address className="body-4">
-  {fullAddress}
-</address>
+              {fullAddress}
+            </address>
 
             <a
               href={`mailto:${email}`}
@@ -111,14 +113,7 @@ export default async function Footer() {
             </a>
 
             <div className="footer-hours">
-              {weeklyScheduleLines.map((line) => (
-                <p
-                  className="body-4"
-                  key={`${line.dayLabel}-${line.hoursText}`}
-                >
-                  {line.dayLabel} : {line.hoursText}
-                </p>
-              ))}
+              <RestaurantHoursSchedule calendar={hoursCalendar} />
             </div>
 
             <div className="wrapper" aria-hidden="true">

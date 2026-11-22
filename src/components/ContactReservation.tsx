@@ -2,29 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useForm, ValidationError } from "@formspree/react";
+import type { RestaurantHoursCalendar } from "@/lib/restaurant-hours-calendar";
+import RestaurantHoursSchedule from "@/components/RestaurantHoursSchedule";
+
 
 const FORMSPREE_FORM_ID = "mqerolpj";
-
-type WeeklyScheduleLine = {
-  dayLabel: string;
-  hoursText: string;
-};
-
-type TodaySpecialHours = {
-  dateLabel: string;
-  isOpen: boolean;
-  hoursText: string;
-  message: string | null;
-};
 
 type CustomerNoticeDisplay = {
   message: string;
   isEnabled: boolean;
 };
 
+
 type ContactReservationProps = {
-  weeklyScheduleLines: WeeklyScheduleLine[];
-  todaySpecialHours: TodaySpecialHours | null;
+  hoursCalendar: RestaurantHoursCalendar;
   phone: string;
   phoneHref: string;
   fullAddress: string;
@@ -32,15 +23,17 @@ type ContactReservationProps = {
   onlineOrderingNotice: CustomerNoticeDisplay | null;
 };
 
+
+
 export default function ContactReservation({
-  weeklyScheduleLines,
-  todaySpecialHours,
+  hoursCalendar,
   phone,
   phoneHref,
   fullAddress,
   sameDayOrderNotice,
   onlineOrderingNotice,
 }: ContactReservationProps) {
+
   const [state, handleSubmit] = useForm(FORMSPREE_FORM_ID);
   const [minimumRequestDate, setMinimumRequestDate] = useState("");
 
@@ -308,63 +301,9 @@ export default function ContactReservation({
               {fullAddress}
             </address>
 
-            <p className="contact-label">Hours</p>
 
-            <div
-              className={`homepage-hours-list body-4 ${todaySpecialHours
-                ? "has-special-hours"
-                : "regular-hours-only"
-                }`}
-            >
-              {todaySpecialHours && (
-                <div className="homepage-hours-special">
-                  <p className="homepage-hours-special-label">
-                    Current Special Hours
-                  </p>
+            <RestaurantHoursSchedule calendar={hoursCalendar} />
 
-                  <div className="homepage-hours-row homepage-hours-special-row">
-                    <span>{todaySpecialHours.dateLabel}</span>
-
-                    <strong
-                      className={
-                        todaySpecialHours.isOpen
-                          ? undefined
-                          : "is-closed"
-                      }
-                    >
-                      {todaySpecialHours.isOpen
-                        ? todaySpecialHours.hoursText.replace(
-                          " to ",
-                          " - ",
-                        )
-                        : "Closed"}
-                    </strong>
-                  </div>
-
-                  {todaySpecialHours.message && (
-                    <small className="homepage-hours-special-message">
-                      {todaySpecialHours.message}
-                    </small>
-                  )}
-                </div>
-              )}
-
-              {todaySpecialHours && (
-                <p className="homepage-hours-regular-label">
-                  Regular Weekly Hours
-                </p>
-              )}
-
-              {weeklyScheduleLines.map((line) => (
-                <div
-                  className="homepage-hours-row homepage-hours-regular-row"
-                  key={`${line.dayLabel}-${line.hoursText}`}
-                >
-                  <span>{line.dayLabel}</span>
-                  <strong>{line.hoursText}</strong>
-                </div>
-              ))}
-            </div>
 
             {onlineOrderingNotice?.isEnabled && (
               <>
